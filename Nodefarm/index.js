@@ -1,0 +1,48 @@
+const fs = require('fs');
+const http = require('http');
+const url = require('url');
+
+//Sync
+// const textIn = fs.readFileSync('./txt/input.txt', 'utf-8');
+// console.log(textIn);
+// const textOut = `This is what we know about: ${textIn}.\n Created on ${Date.now()}`;
+// fs.writeFileSync('./txt/output.txt',textOut);
+// console.log('File written');
+
+//Async
+// fs.readFile('./txt/start.txt', 'utf-8', (error, data) => {
+//     console.log(data);
+// })
+
+// SERVER
+
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
+const dataObj = JSON.parse(data);
+
+const server = http.createServer((request,response) => {
+    const pathName = request.url;
+
+    if(pathName === '/' || pathName === '/overview') {
+        response.end('This is the OVERVIEW');
+    }
+    else if (pathName ==='/product') {
+        response.end('This is the PRODUCT');
+    }
+    else if (pathName === '/api') {
+        response.writeHead(200, { 'Content-type': 'application/json'});
+        response.end(data);
+    
+    }
+    else {
+        response.writeHead(404, {
+            'Content-type': 'text/html',
+
+        });
+        response.end('<h1>Page NOT FOUND</h1>');
+    }
+});
+
+server.listen(8000,'127.0.0.1', () => {
+    console.log('Listening to requests on port 8000');
+})
+

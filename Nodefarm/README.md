@@ -1,0 +1,1 @@
+Initial project before moving on to tour booking website, to teach the fundamentals of Node.
