@@ -40,12 +40,11 @@ const dataObj = JSON.parse(data);
 
 
 const server = http.createServer((request,response) => {
-    const pathName = request.url;
+    const {query,pathname} = url.parse(request.url, true);
 
     //Overview page
-    if(pathName === '/' || pathName === '/overview') {
+    if(pathname === '/' || pathname === '/overview') {
         response.writeHead(200, { 'Content-type':'text/html'});
-
 
         const cardsHtml = dataObj.map(element => replaceTemplate(tempCard,element)).join('');
         const output = tempOverview.replace('{%PRODUCT_CARDS%}',cardsHtml);
@@ -54,12 +53,15 @@ const server = http.createServer((request,response) => {
     }
 
     //product page
-    else if (pathName ==='/product') {
-        response.end('This is the PRODUCT');
+    else if (pathname ==='/product') {
+        response.writeHead(200, {'Content-type':'text/html'});
+        const product = dataObj[query.id];
+        const output = replaceTemplate(tempProduct, product);
+        response.end(output);
     }
 
     //api
-    else if (pathName === '/api') {
+    else if (pathname === '/api') {
         response.writeHead(200, { 'Content-type': 'application/json'});
         response.end(data);
     
