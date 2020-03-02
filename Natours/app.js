@@ -20,6 +20,24 @@ app.get('/api/v1/tours', (request,reponse) => {
     })
 })
 
+app.get('/api/v1/tours/:id', (request,response) => {
+    const id = request.params.id * 1;
+    const tour = tours.find(element => element.id === id);
+
+    if (!tour) {
+        return response.status(404).json({
+            status: 'fail', 
+            message: 'invalid id'
+        });
+    }
+    response.status(200).json({
+        status: 'success',
+        data: {
+            tour: tour
+        }
+    })
+})
+
 app.post('/api/v1/tours', (request,response) => {
 
     const newId = tours[tours.length-1].id + 1;
@@ -34,6 +52,34 @@ app.post('/api/v1/tours', (request,response) => {
                 tour: newTour
             }
         })
+    })
+})
+
+app.patch('/api/v1/tours/:id', (request,response) => {
+    if (request.params.id * 1 > tours.length) {
+        return response.status(404).json({
+            status: 'fail', 
+            message: 'invalid id'
+        });
+    }
+    response.status(200).json({
+        status: 'success',
+        data: {
+            tour: "<Updated Tour here>"
+        }
+    })
+})
+
+app.delete('/api/v1/tours/:id', (request,response) => {
+    if (request.params.id * 1 > tours.length) {
+        return response.status(404).json({
+            status: 'fail', 
+            message: 'invalid id'
+        });
+    }
+    response.status(204).json({
+        status: 'success',
+        data: null
     })
 })
 
