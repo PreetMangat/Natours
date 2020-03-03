@@ -9,8 +9,9 @@ app.use(express.json());
 //data
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`));
 
-//routes
-app.get('/api/v1/tours', (request,reponse) => {
+//Handlers
+
+const getAllTours =  (request,reponse) => {
     reponse.status(200).json({
         status: 'success',
         results: tours.length,
@@ -18,9 +19,9 @@ app.get('/api/v1/tours', (request,reponse) => {
             tours: tours
         }
     })
-})
+};
 
-app.get('/api/v1/tours/:id', (request,response) => {
+const getTour =  (request,response) => {
     const id = request.params.id * 1;
     const tour = tours.find(element => element.id === id);
 
@@ -36,9 +37,9 @@ app.get('/api/v1/tours/:id', (request,response) => {
             tour: tour
         }
     })
-})
+};
 
-app.post('/api/v1/tours', (request,response) => {
+const createTour = (request,response) => {
 
     const newId = tours[tours.length-1].id + 1;
     const newTour = Object.assign({id: newId}, request.body);
@@ -53,9 +54,9 @@ app.post('/api/v1/tours', (request,response) => {
             }
         })
     })
-})
+};
 
-app.patch('/api/v1/tours/:id', (request,response) => {
+const updateTour = (request,response) => {
     if (request.params.id * 1 > tours.length) {
         return response.status(404).json({
             status: 'fail', 
@@ -68,9 +69,9 @@ app.patch('/api/v1/tours/:id', (request,response) => {
             tour: "<Updated Tour here>"
         }
     })
-})
+};
 
-app.delete('/api/v1/tours/:id', (request,response) => {
+const deleteTour = (request,response) => {
     if (request.params.id * 1 > tours.length) {
         return response.status(404).json({
             status: 'fail', 
@@ -81,7 +82,17 @@ app.delete('/api/v1/tours/:id', (request,response) => {
         status: 'success',
         data: null
     })
-})
+};
+
+// Routes
+app.route('/api/v1/tours')
+    .get(getAllTours)
+    .post(createTour);
+app.route('/api/v1/tours/:id')
+    .get(getTour)
+    .patch(updateTour)
+    .delete(deleteTour);
+
 
 //server
 const port = 3000;
