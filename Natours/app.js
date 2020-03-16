@@ -12,6 +12,8 @@ app.use(express.json());
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`));
 
 //Handlers
+
+    //Tour Handlers
 const getAllTours =  (request,reponse) => {
     reponse.status(200).json({
         status: 'success',
@@ -85,14 +87,72 @@ const deleteTour = (request,response) => {
     })
 };
 
+    //User Handlers
+
+const getAllUsers = (request, response) => {
+    response.status(500).json({
+        status: 'error',
+        message: 'This route is not yet defined'
+    });
+};
+
+const getUser = (request, response) => {
+    response.status(500).json({
+        status: 'error',
+        message: 'This route is not yet defined'
+    });
+};
+
+const createUser = (request, response) => {
+    response.status(500).json({
+        status: 'error',
+        message: 'This route is not yet defined'
+    });
+};
+
+const updateUser = (request, response) => {
+    response.status(500).json({
+        status: 'error',
+        message: 'This route is not yet defined'
+    });
+};
+
+const deleteUser = (request, response) => {
+    response.status(500).json({
+        status: 'error',
+        message: 'This route is not yet defined'
+    });
+};
+
 // Routes
-app.route('/api/v1/tours')
+const tourRouter = express.Router();
+const userRouter = express.Router();
+
+app.use('/api/v1/tours' , tourRouter);
+app.use('/api/v1/users', userRouter);
+
+
+tourRouter
+    .route('/')
     .get(getAllTours)
     .post(createTour);
-app.route('/api/v1/tours/:id')
+
+tourRouter
+    .route('/:id')
     .get(getTour)
     .patch(updateTour)
     .delete(deleteTour);
+
+userRouter
+    .route('/')
+    .get(getAllUsers)
+    .post(createUser);
+
+userRouter
+    .route('/:id')
+    .get(getUser)
+    .patch(updateUser)
+    .delete(deleteUser);
 
 
 //server
